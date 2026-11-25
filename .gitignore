@@ -49,3 +49,5 @@ next-env.d.ts
 # supabase local
 supabase/.branches
 supabase/.temp
+
+/e2e/demo

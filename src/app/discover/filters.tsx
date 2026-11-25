@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useRef, useTransition } from "react";
+import { useRef, useState } from "react";
 import { Search, X, Loader2 } from "lucide-react";
 import { CATEGORIES, NEIGHBOURHOODS } from "@/lib/constants";
 import { Input, NativeSelect } from "@/components/ui/input";
@@ -19,7 +19,12 @@ const WHEN_OPTIONS = [
 export function DiscoverFilters() {
   const router = useRouter();
   const params = useSearchParams();
-  const [pending, startTransition] = useTransition();
+  // Navigation target we're waiting on. The spinner shows until the URL
+  // (search params) catches up. We call router.replace directly rather than
+  // inside our own startTransition, which could hang in production builds.
+  const [target, setTarget] = useState<string | null>(null);
+  const currentQs = params.toString();
+  const pending = target !== null && target !== currentQs;
   const formRef = useRef<HTMLFormElement>(null);
 
   const current = {
@@ -35,7 +40,14 @@ export function DiscoverFilters() {
     const merged = { ...current, ...next };
     const sp = new URLSearchParams();
     Object.entries(merged).forEach(([k, v]) => v && sp.set(k, v));
-    startTransition(() => router.replace(`/discover${sp.size ? `?${sp}` : ""}`, { scroll: false }));
+    go(sp);
+  }
+
+  function go(sp: URLSearchParams) {
+    const qs = sp.toString();
+    if (qs === currentQs) return;
+    setTarget(qs);
+    router.replace(`/discover${qs ? `?${qs}` : ""}`, { scroll: false });
   }
 
   function categoryHref(value: string) {
@@ -133,7 +145,7 @@ export function DiscoverFilters() {
           type="button"
           onClick={() => {
             formRef.current?.reset();
-            startTransition(() => router.replace("/discover", { scroll: false }));
+            go(new URLSearchParams());
           }}
           className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline cursor-pointer"
         >
