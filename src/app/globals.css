@@ -1,0 +1,81 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme inline {
+  --font-sans: "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque Variable", "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, sans-serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--foreground);
+  --color-popover: var(--card);
+  --color-popover-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--foreground);
+  --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-border: var(--border);
+  --color-input: var(--border);
+  --color-ring: var(--primary);
+  --color-navy: var(--navy);
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.5rem;
+}
+
+:root {
+  --background: #fbf8f4;
+  --foreground: #1b1f3b;
+  --navy: #1b1f3b;
+  --card: #ffffff;
+  --primary: #f0553f;
+  --primary-foreground: #ffffff;
+  --secondary: #f3eee7;
+  --muted: #f3eee7;
+  --muted-foreground: #5f6378;
+  --accent: #fff0eb;
+  --destructive: #d92d20;
+  --success: #0f8a5f;
+  --warning: #b45309;
+  --border: #e9e3da;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+  :focus-visible {
+    @apply outline-none ring-2 ring-primary/60 ring-offset-2 ring-offset-background;
+  }
+}
+
+@utility shadow-soft {
+  box-shadow: 0 1px 2px rgb(27 31 59 / 0.04), 0 4px 16px -4px rgb(27 31 59 / 0.08);
+}
+@utility shadow-lift {
+  box-shadow: 0 2px 4px rgb(27 31 59 / 0.04), 0 12px 32px -8px rgb(27 31 59 / 0.16);
+}
+@utility pb-safe {
+  padding-bottom: calc(env(safe-area-inset-bottom) + 0.5rem);
+}
