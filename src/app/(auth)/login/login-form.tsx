@@ -19,6 +19,11 @@ export function LoginForm({ next, initialError }: { next?: string; initialError?
       <Field label="Password" htmlFor="password" error={fe.password}>
         <Input id="password" name="password" type="password" autoComplete="current-password" required aria-invalid={!!fe.password} />
       </Field>
+      <div className="-mt-1 text-right">
+        <Link href="/forgot-password" className="text-sm font-semibold text-primary hover:underline">
+          Forgot password?
+        </Link>
+      </div>
       <SubmitButton pending={pending} className="w-full" size="lg" pendingText="Logging in…">
         Log in
       </SubmitButton>

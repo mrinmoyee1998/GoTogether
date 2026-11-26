@@ -8,6 +8,7 @@ import { ActivityCard } from "@/components/activity/activity-card";
 import { EmptyState } from "@/components/empty-state";
 import { Button } from "@/components/ui/button";
 import { DiscoverFilters } from "./filters";
+import { FlashToast } from "@/components/flash-toast";
 
 export const metadata: Metadata = { title: "Discover activities" };
 
@@ -41,6 +42,9 @@ export default async function DiscoverPage({ searchParams }: { searchParams: SP 
         </Button>
       </div>
 
+      <Suspense>
+        <FlashToast messages={{ password: "Your password has been updated. You're logged in." }} />
+      </Suspense>
       <div className="mt-6">
         <Suspense>
           <DiscoverFilters />

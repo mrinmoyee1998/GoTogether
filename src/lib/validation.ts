@@ -20,6 +20,17 @@ export const loginSchema = z.object({
   password: z.string().min(1, "Password is required"),
 });
 
+export const forgotPasswordSchema = z.object({
+  email: z.string().trim().toLowerCase().email("Enter a valid email address"),
+});
+
+export const resetPasswordSchema = z
+  .object({
+    password: z.string().min(8, "Password must be at least 8 characters").max(72, "Password is too long"),
+    confirm: z.string(),
+  })
+  .refine((v) => v.password === v.confirm, { message: "Passwords don't match", path: ["confirm"] });
+
 export const profileSchema = z.object({
   full_name: trimmed(2, 80, "Full name"),
   age_confirmed: z.literal(true, {

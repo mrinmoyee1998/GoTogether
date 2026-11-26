@@ -6,7 +6,7 @@ GoTogether is an activity-first social discovery app for young adults in Mumbai.
 
 ## Features
 
-- **Auth:** email/password sign-up, login and logout via Supabase Auth, with persistent sessions and protected routes (middleware).
+- **Auth:** email/password sign-up, login, logout and **forgot password** (reset by email) via Supabase Auth, with persistent sessions and protected routes (middleware).
 - **Onboarding and profile:** name, optional photo (Supabase Storage), required 18+ confirmation, city, neighbourhood, bio and interests.
 - **Discover:** upcoming activities with search, category chips, neighbourhood, date presets (today / this weekend / next 7 days) and a date picker, plus empty states.
 - **Activity details:** cover, date/time (IST), venue, Google Maps link, cost, spots meter, organiser card and confirmed participants. The join button shows the right state: join / pending / accepted / declined / full / cancelled / started / organiser.
@@ -144,6 +144,18 @@ In **Authentication → URL Configuration**:
 
 - **Keep it on (recommended for real users):** after sign-up, users see "check your inbox", click the link, land on `/auth/callback`, then go to onboarding. Supabase's built-in email sender is rate-limited, so for a public launch set up custom SMTP (**Authentication → Emails → SMTP**).
 - **For a quick demo/buildathon:** turn off **Authentication → Providers → Email → Confirm email**. Users then go straight to onboarding after sign-up.
+
+### Password reset ("Forgot password?")
+
+The login page links to `/forgot-password`. The user enters their email, and Supabase sends a reset email. The link goes through `/auth/callback` to `/reset-password`, where the user sets a new password and is logged in.
+
+For this to work on your hosted project:
+
+1. **Allow the redirect.** In **Authentication → URL Configuration → Redirect URLs**, add `https://<your-app>.vercel.app/**`. You can also add `http://localhost:3000/**` for local dev.
+2. **Use the cross-device email template (recommended).** In **Authentication → Emails → Reset Password**, replace the message body with the contents of `supabase/templates/recovery.html`. Its link includes a one-time token, so it works even if the user opens the email on a different device from the one they requested it on. With Supabase's default template, the link only works in the browser that requested it; anywhere else the user is sent back to request a new link.
+3. **Email limits.** Supabase's built-in email service only sends a few emails per hour. Set up custom SMTP before a real launch (**Authentication → Emails → SMTP Settings**).
+
+Locally, `supabase start` already uses this template (see `supabase/config.toml`).
 
 ### 7. Run locally
 

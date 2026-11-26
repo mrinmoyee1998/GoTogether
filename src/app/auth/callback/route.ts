@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { safeNext } from "@/lib/utils";
 
 /**
- * Handles Supabase email links (signup confirmation, magic links).
+ * Handles Supabase email links (signup confirmation, password reset).
  * Supports both the PKCE `code` flow and the `token_hash` flow.
  */
 export async function GET(request: NextRequest) {
@@ -26,5 +26,10 @@ export async function GET(request: NextRequest) {
   }
 
   if (ok) return NextResponse.redirect(`${origin}${next}`);
+  // Reset links that fail (expired, already used, opened in another browser)
+  // go back to the "forgot password" page so the user can request a new one.
+  if (type === "recovery" || next.startsWith("/reset-password")) {
+    return NextResponse.redirect(`${origin}/forgot-password?error=expired`);
+  }
   return NextResponse.redirect(`${origin}/login?error=link`);
 }
